@@ -24,17 +24,13 @@ namespace ComplaintManagementSystem.Controllers
 
             var totalComplaints = await _context.Complaints.CountAsync();
 
-            var pendingComplaints = await _context.Complaints
-                .CountAsync(c => c.Status == "Pending");
+            var pendingComplaints = await _context.Complaints.CountAsync(c => c.Status == "Pending");
 
-            var inProgressComplaints = await _context.Complaints
-                .CountAsync(c => c.Status == "In Progress");
+            var inProgressComplaints = await _context.Complaints.CountAsync(c => c.Status == "In Progress");
 
-            var resolvedComplaints = await _context.Complaints
-                .CountAsync(c => c.Status == "Resolved");
+            var resolvedComplaints = await _context.Complaints.CountAsync(c => c.Status == "Resolved");
 
-            var highPriorityComplaints = await _context.Complaints
-                .CountAsync(c => c.Priority == "High");
+            var highPriorityComplaints = await _context.Complaints.CountAsync(c => c.Priority == "High");
 
             var statistics = new
             {
