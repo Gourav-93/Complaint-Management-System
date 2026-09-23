@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Details | Complaint Management</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path></svg>
+            CMS Admin
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                Dashboard
+            </a>
+            <a href="complaints.html" class="active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Complaints
+            </a>
+            <a href="users.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                Users
+            </a>
+            <a href="technicians.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                Technicians
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Navbar -->
+        <header class="top-navbar">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="menu-toggle" aria-label="Toggle menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <h1 class="page-title">Complaint Details</h1>
+            </div>
+            <div class="navbar-right">
+                <a href="complaints.html" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Back to List
+                </a>
+            </div>
+        </header>
+
+        <div class="page-container">
+            <div id="detailsLoader" class="page-loader">
+                <div class="loader"></div>
+            </div>
+
+            <div id="detailsContent" style="display: none;">
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div class="card-header">
+                        <h2 class="card-title" style="display: flex; align-items: center; gap: 1rem;">
+                            <span id="cId"></span>
+                            <span id="cTitle"></span>
+                        </h2>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <span id="cStatus"></span>
+                            <span id="cPriority"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="details-grid">
+                        <div>
+                            <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-secondary);">General Information</h3>
+                            
+                            <div class="info-group">
+                                <div class="info-label">Category</div>
+                                <div class="info-value" id="cCategory"></div>
+                            </div>
+                            
+                            <div class="info-group">
+                                <div class="info-label">Created Date</div>
+                                <div class="info-value" id="cDate"></div>
+                            </div>
+                            
+                            <div class="info-group">
+                                <div class="info-label">Description</div>
+                                <div class="info-value" id="cDescription" style="white-space: pre-wrap; margin-top: 0.5rem; padding: 1rem; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid var(--border-color);"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div style="margin-bottom: 2rem;">
+                                <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-secondary);">User Information</h3>
+                                <div class="info-group">
+                                    <div class="info-label">Name</div>
+                                    <div class="info-value" id="uName"></div>
+                                </div>
+                                <div class="info-group">
+                                    <div class="info-label">Email</div>
+                                    <div class="info-value" id="uEmail"></div>
+                                </div>
+                                <div class="info-group">
+                                    <div class="info-label">Department</div>
+                                    <div class="info-value" id="uDept"></div>
+                                </div>
+                                <div class="info-group">
+                                    <div class="info-label">Phone</div>
+                                    <div class="info-value" id="uPhone"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-secondary);">Technician Information</h3>
+                                <div class="info-group">
+                                    <div class="info-label">Name</div>
+                                    <div class="info-value" id="tName"></div>
+                                </div>
+                                <div class="info-group">
+                                    <div class="info-label">Email</div>
+                                    <div class="info-value" id="tEmail"></div>
+                                </div>
+                                <div class="info-group">
+                                    <div class="info-label">Specialization</div>
+                                    <div class="info-value" id="tSpec"></div>
+                                </div>
+                                <div class="info-group">
+                                    <div class="info-label">Department</div>
+                                    <div class="info-value" id="tDept"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="errorState" class="empty-state" style="display: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <h3>Complaint not found</h3>
+                <p>The complaint you are looking for does not exist or has been deleted.</p>
+                <a href="complaints.html" class="btn btn-primary" style="margin-top: 1rem;">Back to Complaints</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/complaint-details.js"></script>
+</body>
+</html>

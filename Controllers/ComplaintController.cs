@@ -17,14 +17,29 @@ namespace ComplaintManagementSystem.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetComplaints()
+        public async Task<IActionResult> GetComplaints([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var complaints = await _context.Complaints
+            var query = _context.Complaints
                 .Include(c => c.User)
                 .Include(c => c.Technician)
+                .AsQueryable();
+
+            var totalComplaints = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalComplaints / (double)pageSize);
+
+            var data = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
-            return Ok(complaints);
+            return Ok(new
+            {
+                page,
+                pageSize,
+                totalComplaints,
+                totalPages,
+                data
+            });
         }
 
         [HttpGet("{id}")]
@@ -101,10 +116,12 @@ namespace ComplaintManagementSystem.Controllers
 
         [HttpGet("search")]
         public async Task<IActionResult> SearchComplaints(
-            string? search,
-            string? status,
-            string? priority,
-            string? category)
+            [FromQuery] string? search,
+            [FromQuery] string? status,
+            [FromQuery] string? priority,
+            [FromQuery] string? category,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
             var query = _context.Complaints
                 .Include(c => c.User)
@@ -134,9 +151,22 @@ namespace ComplaintManagementSystem.Controllers
                 query = query.Where(c => c.Category == category);
             }
 
-            var complaints = await query.ToListAsync();
+            var totalComplaints = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalComplaints / (double)pageSize);
 
-            return Ok(complaints);
+            var data = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return Ok(new
+            {
+                page,
+                pageSize,
+                totalComplaints,
+                totalPages,
+                data
+            });
         }
     }
 }

@@ -16,7 +16,6 @@ namespace ComplaintManagementSystem.Controllers
             _context = context;
         }
 
-        // GET: api/Technician
         [HttpGet]
         public async Task<IActionResult> GetTechnicians()
         {
@@ -25,7 +24,6 @@ namespace ComplaintManagementSystem.Controllers
             return Ok(technicians);
         }
 
-        // GET: api/Technician/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTechnician(int id)
         {
@@ -39,7 +37,6 @@ namespace ComplaintManagementSystem.Controllers
             return Ok(technician);
         }
 
-        // POST: api/Technician
         [HttpPost]
         public async Task<IActionResult> CreateTechnician(Technician technician)
         {
@@ -50,7 +47,6 @@ namespace ComplaintManagementSystem.Controllers
             return Ok(technician);
         }
 
-        // PUT: api/Technician/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTechnician(
             int id,
@@ -74,7 +70,6 @@ namespace ComplaintManagementSystem.Controllers
             return Ok(existingTechnician);
         }
 
-        // DELETE: api/Technician/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTechnician(int id)
         {
@@ -92,6 +87,7 @@ namespace ComplaintManagementSystem.Controllers
 
             return Ok("Technician deleted successfully");
         }
+
         [HttpGet("{id}/complaints")]
         public async Task<IActionResult> GetTechnicianComplaints(int id)
         {
