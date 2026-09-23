@@ -1,6 +1,3 @@
-let currentPage = 1;
-let currentSize = 10;
-let totalPages = 1;
 let debounceTimeout;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -14,14 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     searchInput.addEventListener('input', () => debounceSearch());
     filterCategory.addEventListener('input', () => debounceSearch());
-    filterStatus.addEventListener('change', () => { currentPage = 1; loadComplaints(); });
-    filterPriority.addEventListener('change', () => { currentPage = 1; loadComplaints(); });
+    filterStatus.addEventListener('change', () => { loadComplaints(); });
+    filterPriority.addEventListener('change', () => { loadComplaints(); });
 });
 
 function debounceSearch() {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
-        currentPage = 1;
         loadComplaints();
     }, 500);
 }
@@ -31,7 +27,6 @@ function resetFilters() {
     document.getElementById('filterStatus').value = '';
     document.getElementById('filterPriority').value = '';
     document.getElementById('filterCategory').value = '';
-    currentPage = 1;
     loadComplaints();
 }
 
@@ -52,17 +47,18 @@ async function loadComplaints() {
         const priority = document.getElementById('filterPriority').value;
         const category = document.getElementById('filterCategory').value;
 
-        let query = `/Complaint/search?page=${currentPage}&pageSize=${currentSize}`;
-        if (search) query += `&search=${encodeURIComponent(search)}`;
-        if (status) query += `&status=${encodeURIComponent(status)}`;
-        if (priority) query += `&priority=${encodeURIComponent(priority)}`;
-        if (category) query += `&category=${encodeURIComponent(category)}`;
+        let query = `/Complaint/search?`;
+        const params = [];
+        if (search) params.push(`search=${encodeURIComponent(search)}`);
+        if (status) params.push(`status=${encodeURIComponent(status)}`);
+        if (priority) params.push(`priority=${encodeURIComponent(priority)}`);
+        if (category) params.push(`category=${encodeURIComponent(category)}`);
+        
+        query += params.join('&');
 
         const response = await apiRequest(query);
 
-        totalPages = response.totalPages;
         renderTable(response.data);
-        renderPagination(response.totalComplaints);
 
         emptyState.style.display = response.data.length === 0 ? 'block' : 'none';
         content.style.display = 'block';
@@ -106,47 +102,7 @@ function renderTable(complaints) {
     });
 }
 
-function renderPagination(totalItems) {
-    document.getElementById('paginationInfo').textContent = `Showing ${(currentPage - 1) * currentSize + 1} to ${Math.min(currentPage * currentSize, totalItems)} of ${totalItems} complaints`;
-    
-    document.getElementById('btnPrevPage').disabled = currentPage <= 1;
-    document.getElementById('btnNextPage').disabled = currentPage >= totalPages;
 
-    const pageNumbers = document.getElementById('pageNumbers');
-    pageNumbers.innerHTML = '';
-    
-    for (let i = 1; i <= totalPages; i++) {
-        // Simple logic for small number of pages
-        const btn = document.createElement('button');
-        btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-        btn.textContent = i;
-        btn.onclick = () => {
-            currentPage = i;
-            loadComplaints();
-        };
-        pageNumbers.appendChild(btn);
-    }
-}
-
-function prevPage() {
-    if (currentPage > 1) {
-        currentPage--;
-        loadComplaints();
-    }
-}
-
-function nextPage() {
-    if (currentPage < totalPages) {
-        currentPage++;
-        loadComplaints();
-    }
-}
-
-function changePageSize(size) {
-    currentSize = parseInt(size);
-    currentPage = 1;
-    loadComplaints();
-}
 
 // Modal Logic
 let usersLoaded = false;

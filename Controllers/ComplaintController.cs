@@ -17,7 +17,7 @@ namespace ComplaintManagementSystem.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetComplaints([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetComplaints()
         {
             var query = _context.Complaints
                 .Include(c => c.User)
@@ -25,19 +25,13 @@ namespace ComplaintManagementSystem.Controllers
                 .AsQueryable();
 
             var totalComplaints = await query.CountAsync();
-            var totalPages = (int)Math.Ceiling(totalComplaints / (double)pageSize);
 
             var data = await query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
                 .ToListAsync();
 
             return Ok(new
             {
-                page,
-                pageSize,
                 totalComplaints,
-                totalPages,
                 data
             });
         }
@@ -119,9 +113,7 @@ namespace ComplaintManagementSystem.Controllers
             [FromQuery] string? search,
             [FromQuery] string? status,
             [FromQuery] string? priority,
-            [FromQuery] string? category,
-            [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 10)
+            [FromQuery] string? category)
         {
             var query = _context.Complaints
                 .Include(c => c.User)
@@ -152,19 +144,13 @@ namespace ComplaintManagementSystem.Controllers
             }
 
             var totalComplaints = await query.CountAsync();
-            var totalPages = (int)Math.Ceiling(totalComplaints / (double)pageSize);
 
             var data = await query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
                 .ToListAsync();
 
             return Ok(new
             {
-                page,
-                pageSize,
                 totalComplaints,
-                totalPages,
                 data
             });
         }
