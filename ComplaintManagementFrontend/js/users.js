@@ -2,10 +2,6 @@ let allUsers = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     loadUsers();
-    
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        filterUsers(e.target.value);
-    });
 });
 
 async function loadUsers() {
@@ -17,7 +13,7 @@ async function loadUsers() {
         content.style.display = 'none';
 
         allUsers = await apiRequest('/User');
-        filterUsers(document.getElementById('searchInput').value);
+        renderTable(allUsers);
 
         content.style.display = 'block';
     } catch (error) {
@@ -27,15 +23,7 @@ async function loadUsers() {
     }
 }
 
-function filterUsers(query) {
-    const term = query.toLowerCase().trim();
-    const filtered = allUsers.filter(u => 
-        (u.name && u.name.toLowerCase().includes(term)) ||
-        (u.email && u.email.toLowerCase().includes(term)) ||
-        (u.department && u.department.toLowerCase().includes(term))
-    );
-    renderTable(filtered);
-}
+
 
 function renderTable(users) {
     const tbody = document.getElementById('usersTableBody');

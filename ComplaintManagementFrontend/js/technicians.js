@@ -2,10 +2,6 @@ let allTechnicians = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     loadTechnicians();
-    
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        filterTechnicians(e.target.value);
-    });
 });
 
 async function loadTechnicians() {
@@ -17,7 +13,7 @@ async function loadTechnicians() {
         content.style.display = 'none';
 
         allTechnicians = await apiRequest('/Technician');
-        filterTechnicians(document.getElementById('searchInput').value);
+        renderTable(allTechnicians);
 
         content.style.display = 'block';
     } catch (error) {
@@ -27,15 +23,7 @@ async function loadTechnicians() {
     }
 }
 
-function filterTechnicians(query) {
-    const term = query.toLowerCase().trim();
-    const filtered = allTechnicians.filter(t => 
-        (t.name && t.name.toLowerCase().includes(term)) ||
-        (t.email && t.email.toLowerCase().includes(term)) ||
-        (t.specialization && t.specialization.toLowerCase().includes(term))
-    );
-    renderTable(filtered);
-}
+
 
 function renderTable(technicians) {
     const tbody = document.getElementById('techniciansTableBody');

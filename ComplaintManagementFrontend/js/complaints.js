@@ -3,13 +3,10 @@ let debounceTimeout;
 document.addEventListener('DOMContentLoaded', () => {
     loadComplaints();
     
-    // Attach event listeners for search/filters
-    const searchInput = document.getElementById('searchInput');
     const filterStatus = document.getElementById('filterStatus');
     const filterPriority = document.getElementById('filterPriority');
     const filterCategory = document.getElementById('filterCategory');
 
-    searchInput.addEventListener('input', () => debounceSearch());
     filterCategory.addEventListener('input', () => debounceSearch());
     filterStatus.addEventListener('change', () => { loadComplaints(); });
     filterPriority.addEventListener('change', () => { loadComplaints(); });
@@ -23,7 +20,6 @@ function debounceSearch() {
 }
 
 function resetFilters() {
-    document.getElementById('searchInput').value = '';
     document.getElementById('filterStatus').value = '';
     document.getElementById('filterPriority').value = '';
     document.getElementById('filterCategory').value = '';
@@ -42,25 +38,20 @@ async function loadComplaints() {
             content.style.display = 'none';
         }
 
-        const search = document.getElementById('searchInput').value;
         const status = document.getElementById('filterStatus').value;
         const priority = document.getElementById('filterPriority').value;
         const category = document.getElementById('filterCategory').value;
 
-        let query = `/Complaint/search?`;
-        const params = [];
-        if (search) params.push(`search=${encodeURIComponent(search)}`);
-        if (status) params.push(`status=${encodeURIComponent(status)}`);
-        if (priority) params.push(`priority=${encodeURIComponent(priority)}`);
-        if (category) params.push(`category=${encodeURIComponent(category)}`);
-        
-        query += params.join('&');
+        const response = await apiRequest('/Complaint');
+        let filteredData = response.data || [];
 
-        const response = await apiRequest(query);
+        if (status) filteredData = filteredData.filter(c => c.status === status);
+        if (priority) filteredData = filteredData.filter(c => c.priority === priority);
+        if (category) filteredData = filteredData.filter(c => c.category && c.category.toLowerCase().includes(category.toLowerCase()));
 
-        renderTable(response.data);
+        renderTable(filteredData);
 
-        emptyState.style.display = response.data.length === 0 ? 'block' : 'none';
+        emptyState.style.display = filteredData.length === 0 ? 'block' : 'none';
         content.style.display = 'block';
     } catch (error) {
         showToast('Failed to load complaints', 'error');
