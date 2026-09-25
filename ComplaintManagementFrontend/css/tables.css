@@ -17,7 +17,7 @@
 }
 
 .table th {
-  background-color: #f8fafc;
+  background-color: var(--sidebar-hover);
   font-weight: 600;
   font-size: 0.875rem;
   color: var(--text-secondary);
@@ -34,7 +34,7 @@
 }
 
 .table tbody tr:hover {
-  background-color: #f8fafc;
+  background-color: var(--sidebar-hover);
 }
 
 /* Badges */
@@ -132,7 +132,7 @@
   height: 2rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
-  background-color: white;
+  background-color: var(--card-bg);
   color: var(--text-primary);
   font-size: 0.875rem;
   cursor: pointer;
@@ -140,7 +140,7 @@
 }
 
 .page-btn:hover:not(:disabled) {
-  background-color: #f1f5f9;
+  background-color: var(--sidebar-hover);
 }
 
 .page-btn.active {
@@ -166,5 +166,6 @@
   padding: 0.25rem 0.5rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
-  background-color: white;
+  background-color: var(--card-bg);
+  color: var(--text-primary);
 }

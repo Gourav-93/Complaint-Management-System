@@ -10,7 +10,6 @@ namespace ComplaintManagementSystem.Controllers
     public class ComplaintController : ControllerBase
     {
         private readonly AppDbContext _context;
-
         public ComplaintController(AppDbContext context)
         {
             _context = context;
@@ -26,8 +25,7 @@ namespace ComplaintManagementSystem.Controllers
 
             var totalComplaints = await query.CountAsync();
 
-            var data = await query
-                .ToListAsync();
+            var data = await query.ToListAsync();
 
             return Ok(new
             {
@@ -69,8 +67,7 @@ namespace ComplaintManagementSystem.Controllers
             int id,
             Complaint complaint)
         {
-            var existingComplaint =
-                await _context.Complaints.FindAsync(id);
+            var existingComplaint = await _context.Complaints.FindAsync(id);
 
             if (existingComplaint == null)
             {
@@ -106,53 +103,6 @@ namespace ComplaintManagementSystem.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Complaint deleted successfully");
-        }
-
-        [HttpGet("search")]
-        public async Task<IActionResult> SearchComplaints(
-            [FromQuery] string? search,
-            [FromQuery] string? status,
-            [FromQuery] string? priority,
-            [FromQuery] string? category)
-        {
-            var query = _context.Complaints
-                .Include(c => c.User)
-                .Include(c => c.Technician)
-                .AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                query = query.Where(c =>
-                    c.Title.Contains(search) ||
-                    c.Description.Contains(search) ||
-                    c.Category.Contains(search));
-            }
-
-            if (!string.IsNullOrWhiteSpace(status))
-            {
-                query = query.Where(c => c.Status == status);
-            }
-
-            if (!string.IsNullOrWhiteSpace(priority))
-            {
-                query = query.Where(c => c.Priority == priority);
-            }
-
-            if (!string.IsNullOrWhiteSpace(category))
-            {
-                query = query.Where(c => c.Category == category);
-            }
-
-            var totalComplaints = await query.CountAsync();
-
-            var data = await query
-                .ToListAsync();
-
-            return Ok(new
-            {
-                totalComplaints,
-                data
-            });
         }
     }
 }
